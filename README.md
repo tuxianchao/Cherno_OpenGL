@@ -1,5 +1,14 @@
 # Cherno_OpenGL
 
+
+学习OpenGL练习代码
+
+
+youtube: https://www.youtube.com/watch?v=W3gAzLwfIP0&list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
+
+opengl参考文档: http://docs.gl
+
+
 glfw 和 glew 使用静态链接的方式,下载原工程后生成静态链接库，然后把静态链接库和头文件拷贝到工程中使用
 
 ## GLFW
