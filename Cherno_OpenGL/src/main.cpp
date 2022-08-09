@@ -142,24 +142,36 @@ int main(void)
     std::cout << "GL_RENDERER: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "GL_VENDOR: " << glGetString(GL_VENDOR) << std::endl;
 
-    float positions[6] = {
-       -0.5f, -0.5f,
-       0.0f, 0.5f,
-       0.5f, -0.5f,
+    float positions[12] = {
+       -0.5f,   -0.5f,  // 0
+       0.5f,    -0.5f,   // 1
+       0.5f,    0.5f,  // 2
+       -0.5f,   0.5f    // 3
     };
 
-    // 定义和传递数据给OpenGL
+    unsigned int indices[] = {
+        0,1,2,
+        2,3,0
+    };
+
+    // create vertex buffer and copy data
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW);
 
-
-    // 启用顶点属性,并且设置顶点的数据布局
+    // define vertext layout
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
+    // create index buffer
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 2 * 3, indices, GL_STATIC_DRAW);
 
+
+    // create & user shader
     ShaderProgramSource shaderSource = parseShader("res/shaders/Basic.shader");
     std::cout << shaderSource.VertexSource << std::endl;
     std::cout << shaderSource.FragmentSource << std::endl;
@@ -172,8 +184,8 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // 绘制
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // Draw  triangle
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         // glBegin(GL_TRIANGLES);
         // glVertex2f(-0.5f, -0.5f);
