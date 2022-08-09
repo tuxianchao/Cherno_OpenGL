@@ -4,6 +4,65 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+
+static unsigned int CompileShader(unsigned int type, const std::string& source)
+{
+    unsigned int id = glCreateShader(type);
+    const char* src = source.c_str();
+    glShaderSource(id, 1, &src, nullptr);
+    glCompileShader(id);
+
+    // check compile status
+    int success;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        int len;
+        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
+        char* message = (char*)alloca(sizeof(char) * len); //直接栈上分配
+        glGetShaderInfoLog(id, len, &len, message);
+        std::cout << "Error: Compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "Shader." << std::endl;
+        std::cout << message << std::endl;
+        glDeleteShader(id);
+        return 0;
+    }
+
+    return id;
+}
+
+
+static unsigned int CreateShader(const std::string& vertextShader, const std::string& fragmentShader)
+{
+
+    unsigned int shaderProgram = glCreateProgram();                      // 创建shaderProgram
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertextShader);    // 编译顶点shader
+    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader); // 编译像素shader
+
+    glAttachShader(shaderProgram, vs); // 附加到shaderProgram
+    glAttachShader(shaderProgram, fs); // 附加到shaderProgram
+    glLinkProgram(shaderProgram);      // 链接
+    glValidateProgram(shaderProgram);  // https://docs.gl/gl4/glValidateProgram
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    // check link status
+    int success;
+    glGetShaderiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        int len;
+        glGetShaderiv(shaderProgram, GL_INFO_LOG_LENGTH, &len);
+        char* message = (char*)alloca(sizeof(char) * len); //直接栈上分配
+        glGetProgramInfoLog(shaderProgram, len, &len, message);
+        std::cout << "Error:Link Shader." << std::endl;
+        std::cout << message << std::endl;
+        return 0;
+    }
+    std::cout << "create shader success" << std::endl;
+
+    return shaderProgram;
+}
+
 int main(void)
 {
     GLFWwindow* window;
@@ -53,6 +112,26 @@ int main(void)
     // 启用顶点属性,并且设置顶点的数据布局
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+
+    std::string vertexShader =
+        "#version 330 core\n"
+        "\n"
+        "layout(location = 0) in vec4 position;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = position;\n"
+        "}\n";
+
+    std::string fragmentShader =
+        "#version 330 core\n"
+        "\n"
+        "layout(location = 0) out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+    unsigned int shader = CreateShader(vertexShader, fragmentShader);
+    glUseProgram(shader);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
