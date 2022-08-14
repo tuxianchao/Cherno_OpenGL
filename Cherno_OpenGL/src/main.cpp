@@ -153,6 +153,8 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	glfwSwapInterval(1);
+
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
@@ -203,15 +205,34 @@ int main(void)
 	unsigned int shader = CreateShader(shaderSource.VertexSource, shaderSource.FragmentSource);
 	GLCall(glUseProgram(shader));
 
+	GLCall(int location = glGetUniformLocation(shader, "u_Color"));
+	ASSERT(location != -1);
+	float colorR = 0.8f;
+	float colorG = 0.3f;
+	float colorB = 0.8f;
+	float colorAlpha = 1.0f;
+
+
+
+	float incr = 0.05f;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
+		GLCall(glUniform4f(location, colorR, colorG, colorB, colorAlpha));
 		// Draw  triangle
-
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+		if (colorR > 1.0f) {
+			incr = -0.05f;
+		}
+		else if(colorR < 0.0f)
+		{
+			incr = 0.05f;
+		}
+
+		colorR += incr;
 
 		// glBegin(GL_TRIANGLES);
 		// glVertex2f(-0.5f, -0.5f);
