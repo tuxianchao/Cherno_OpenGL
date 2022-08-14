@@ -7,31 +7,10 @@
 #include <string>
 #include <sstream>
 
+#include "Renderer.h"
 
-#define ASSERT(x) if(!(x)) __debugbreak();
-
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLCheckError(#x, __FILE__, __LINE__ ))
-
-
-static void  GLClearError()
-{
-	// 把错误信息取完
-	while (glGetError() != GL_NO_ERROR);
-}
-
-
-static bool GLCheckError(const char* function, const char* file, int line)
-{
-
-	while (GLenum error = glGetError())
-	{
-		std::cout << "[OpenGL error] " << error << " " << function << " " << file << " " << line << std::endl;
-		return false;
-	}
-	return true;
-}
+#include "VertextBuffer.h"
+#include "IndexBuffer.h"
 
 struct ShaderProgramSource
 {
@@ -198,10 +177,11 @@ int main(void)
 
 
 	// create vertex buffer and copy data
-	unsigned int buffer;
-	GLCall(glGenBuffers(1, &buffer));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW));
+	// unsigned int buffer;
+	// GLCall(glGenBuffers(1, &buffer));
+	// GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
+	// GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW));
+	VertextBuffer vb(positions, sizeof(float) * 4 * 2);
 
 	// define vertext layout
 	//  会把0位置的顶点属性和顶点数组链接在一起
@@ -209,13 +189,14 @@ int main(void)
 	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
 
 	// create index buffer
-	unsigned int ibo;
-	GLCall(glGenBuffers(1, &ibo));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 2 * 3, indices, GL_STATIC_DRAW));
+	// unsigned int ibo;
+	// GLCall(glGenBuffers(1, &ibo));
+	// GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+	// GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 2 * 3, indices, GL_STATIC_DRAW));
 
+	IndexBuffer ib(indices, 2 * 3);
 
-	// create & user shader
+	// create & use shader
 	ShaderProgramSource shaderSource = parseShader("res/shaders/Basic.shader");
 	std::cout << shaderSource.VertexSource << std::endl;
 	std::cout << shaderSource.FragmentSource << std::endl;
@@ -249,7 +230,8 @@ int main(void)
 		// 指定一个vao来接受顶点属性的东西，代替掉使用默认的
 		GLCall(glBindVertexArray(vao));
 		// ibo 索引缓冲
-		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+		// GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+		ib.Bind();
 		// Draw  triangle
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
