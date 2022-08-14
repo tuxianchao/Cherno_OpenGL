@@ -186,6 +186,11 @@ int main(void)
 		2,3,0
 	};
 
+	// VAO
+	// VBO
+	// IBO
+	// shader
+
 	// create vao
 	unsigned int vao;
 	GLCall(glGenVertexArrays(1, &vao));
@@ -225,10 +230,10 @@ int main(void)
 	float colorAlpha = 1.0f;
 
 	// clear
-	glUseProgram(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	GLCall(glUseProgram(0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	GLCall(glBindVertexArray(0));
 
 
 
@@ -238,13 +243,13 @@ int main(void)
 	{
 		/* Render here */
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
-		glUseProgram(shader);
+		GLCall(glUseProgram(shader));
 		GLCall(glUniform4f(location, colorR, colorG, colorB, colorAlpha));
 
 		// 指定一个vao来接受顶点属性的东西，代替掉使用默认的
-		glBindVertexArray(vao);
+		GLCall(glBindVertexArray(vao));
 		// ibo 索引缓冲
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
 		// Draw  triangle
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
