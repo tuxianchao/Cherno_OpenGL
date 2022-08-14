@@ -142,6 +142,11 @@ int main(void)
 	if (!glfwInit())
 		return -1;
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
 	if (!window)
@@ -149,13 +154,13 @@ int main(void)
 		glfwTerminate();
 		return -1;
 	}
-
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
 	glfwSwapInterval(1);
 
-
+	// init GLEW
+	glewExperimental = true;// need for core profile
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -181,6 +186,12 @@ int main(void)
 		2,3,0
 	};
 
+	// create vao
+	unsigned int vao;
+	GLCall(glGenVertexArrays(1, &vao));
+	GLCall(glBindVertexArray(vao));
+
+
 	// create vertex buffer and copy data
 	unsigned int buffer;
 	GLCall(glGenBuffers(1, &buffer));
@@ -188,6 +199,7 @@ int main(void)
 	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW));
 
 	// define vertext layout
+	//  会把0位置的顶点属性和顶点数组链接在一起
 	GLCall(glEnableVertexAttribArray(0));
 	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
 
@@ -212,6 +224,12 @@ int main(void)
 	float colorB = 0.8f;
 	float colorAlpha = 1.0f;
 
+	// clear
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
 
 
 	float incr = 0.05f;
@@ -220,7 +238,13 @@ int main(void)
 	{
 		/* Render here */
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		glUseProgram(shader);
 		GLCall(glUniform4f(location, colorR, colorG, colorB, colorAlpha));
+
+		// 指定一个vao来接受顶点属性的东西，代替掉使用默认的
+		glBindVertexArray(vao);
+		// ibo 索引缓冲
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		// Draw  triangle
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
