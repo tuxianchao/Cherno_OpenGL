@@ -172,9 +172,9 @@ int main(void)
 	// shader
 
 	// create vao
-	unsigned int vao;
-	GLCall(glGenVertexArrays(1, &vao));
-	GLCall(glBindVertexArray(vao));
+	// unsigned int vao;
+	// GLCall(glGenVertexArrays(1, &vao));
+	// GLCall(glBindVertexArray(vao));
 
 
 	// create vertex buffer and copy data
@@ -184,14 +184,23 @@ int main(void)
 	// GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW));
 
 
+	// 典型流程
+	// 1. 创建vao: glGenVertexArrays生成顶点数组，glBindVertexArray绑定顶点数组，glEnableVertexAttribArray启用指定的顶点属性，glVertexAttribPointer设置布局，传递数据
+	// 2. 创建vbo: glGenBuffers生成buffer，glBindBuffer绑定buffer，glBufferData从CPU拷贝数据到GPU
+	// 3. 创建ibo: glGenBuffers生成buffer，glBindBuffer绑定buffer，glBufferData从cpu拷贝数据到GPU
+	// 4. 创建shader(编译vs，编译ps，然后链接成一个shaderProgram)
+	// 5. 使用shaderprogram： glUseProgram制定shader
+	// 6. 传递uniform数据：glUniform4f传递给指定的shader
+	// 6. 擦除，绑定vao，绑定vbo，画
+
 	// define vertext layout
 	//  会把0位置的顶点属性和顶点数组链接在一起
 
 	VertexArray va; // 创建顶点数组对象,设置布局和传入尺寸
 	VertexBuffer vb(positions, sizeof(float) * 4 * 2);
 	VertexBufferLayout layout;
-	layout.Push<float>(2);
-	va.AddBuffer(vb, layout);
+	layout.Push<float>(2);// 设置两个布局，数据类型是float
+	va.AddBuffer(vb, layout); // 添加一个vertexBuffer，并且指明布局
 
 	// GLCall(glEnableVertexAttribArray(0));
 	// GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
@@ -247,7 +256,7 @@ int main(void)
 		if (colorR > 1.0f) {
 			incr = -0.05f;
 		}
-		else if(colorR < 0.0f)
+		else if (colorR < 0.0f)
 		{
 			incr = 0.05f;
 		}
@@ -267,7 +276,7 @@ int main(void)
 		glfwPollEvents();
 	}
 
-	GLCall(glDeleteVertexArrays(1, &vao));
+	// GLCall(glDeleteVertexArrays(1, &vao));
 	GLCall(glDeleteProgram(shader));
 	glfwTerminate();
 	return 0;
