@@ -9,8 +9,9 @@
 
 #include "Renderer.h"
 
-#include "VertextBuffer.h"
+#include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 struct ShaderProgramSource
 {
@@ -181,12 +182,19 @@ int main(void)
 	// GLCall(glGenBuffers(1, &buffer));
 	// GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
 	// GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, positions, GL_STATIC_DRAW));
-	VertextBuffer vb(positions, sizeof(float) * 4 * 2);
+
 
 	// define vertext layout
 	//  会把0位置的顶点属性和顶点数组链接在一起
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+
+	VertexArray va; // 创建顶点数组对象,设置布局和传入尺寸
+	VertexBuffer vb(positions, sizeof(float) * 4 * 2);
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	va.AddBuffer(vb, layout);
+
+	// GLCall(glEnableVertexAttribArray(0));
+	// GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
 
 	// create index buffer
 	// unsigned int ibo;
@@ -228,7 +236,8 @@ int main(void)
 		GLCall(glUniform4f(location, colorR, colorG, colorB, colorAlpha));
 
 		// 指定一个vao来接受顶点属性的东西，代替掉使用默认的
-		GLCall(glBindVertexArray(vao));
+		// GLCall(glBindVertexArray(vao));
+		va.Bind();
 		// ibo 索引缓冲
 		// GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
 		ib.Bind();
