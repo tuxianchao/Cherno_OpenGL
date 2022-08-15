@@ -15,8 +15,10 @@ VertexArray::~VertexArray()
 
 void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
 {
-	Bind();
-	vb.Bind();
+	Bind(); // bind VAO
+	vb.Bind(); // bind VBO
+
+	// 遍历有多少个布局，依次激活
 	const auto& elements = layout.GetElements();
 	unsigned int offset = 0;
 	for(unsigned int i = 0 ; i < elements.size(); i++)
@@ -38,5 +40,6 @@ void VertexArray::Bind() const
 
 void VertexArray::unBind() const
 {
+	// bind成0自然也就解开了
 	GLCall(glBindVertexArray(0));
 }
