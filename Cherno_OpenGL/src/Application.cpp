@@ -258,6 +258,8 @@ int main(void)
 		glfwPollEvents();
 	}
 
+	GLCall(glDeleteVertexArrays(1, &vao));
+	GLCall(glDeleteProgram(shader));
 	glfwTerminate();
 	return 0;
 }
