@@ -38,3 +38,20 @@ cmake --build . --config Release
 - github: https://github.com/nigels-com/glew
 
 使用 visual studio 解压打开 vc 项目生成后拷贝头文件和静态库
+
+
+# stb_image
+ - home page https://github.com/nothings/stb.git
+
+ 添加头文件到项目中
+ ```
+Do this:
+      #define STB_IMAGE_IMPLEMENTATION
+   before you include this file in *one* C or C++ file to create the implementation.
+   // i.e. it should look like this:
+   #include ...
+   #include ...
+   #include ...
+   #define STB_IMAGE_IMPLEMENTATION
+   #include "stb_image.h"
+ ```
