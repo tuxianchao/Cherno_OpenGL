@@ -1,5 +1,5 @@
 #include "Shader.h"
-
+#include "Debug.h"
 
 
 Shader::Shader(const std::string &filePath): m_filePath(filePath), m_RenderID(0)

@@ -1,6 +1,6 @@
 #include "VertexBuffer.h"
 #include "Renderer.h"
-
+#include "Debug.h"
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {
