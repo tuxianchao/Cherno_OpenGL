@@ -125,7 +125,6 @@ unsigned int Shader::CreateShader(const std::string& vertextShader, const std::s
 
 
 // set Uniforms
-
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
 
@@ -133,6 +132,12 @@ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2,
 
 }
 
+
+void Shader::SetUniform1i(const std::string& name, unsigned int value)
+{
+	GLCall(glUniform1i(GetUniformLocation(name), value));
+
+}
 unsigned int Shader::GetUniformLocation(const std::string& name)
 {
 

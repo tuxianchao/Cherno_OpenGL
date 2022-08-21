@@ -13,6 +13,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "VertexBufferLayout.h"
+#include "Texture.h"
 
 
 
@@ -31,7 +32,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(900, 600, "Hello World", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -57,11 +58,11 @@ int main(void)
 	std::cout << "GL_RENDERER: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "GL_VENDOR: " << glGetString(GL_VENDOR) << std::endl;
 
-	float positions[12] = {
-	   -0.5f,   -0.5f,  // 0
-	   0.5f,    -0.5f,   // 1
-	   0.5f,    0.5f,  // 2
-	   -0.5f,   0.5f    // 3
+	float positions[] = {
+		-0.5f, -0.5f, 0.0f, 0.0f, 100.0f, // 0
+		 0.5f, -0.5f, 1.0f, 0.0f, 100.0f, // 1
+		 0.5f,  0.5f, 1.0f, 1.0f, 100.0f, // 2
+		-0.5f,  0.5f, 0.0f, 1.0f, 100.0f  // 3
 	};
 
 	unsigned int indices[] = {
@@ -82,28 +83,27 @@ int main(void)
 
 
 	VertexArray va; // 创建顶点数组对象,设置布局和传入尺寸
-	VertexBuffer vb(positions, sizeof(float) * 4 * 2);
+	VertexBuffer vb(positions, sizeof(float) * 4 * 5);
 	VertexBufferLayout layout;
 	layout.Push<float>(2);// 设置两个布局，数据类型是float
+	layout.Push<float>(2);
+	layout.Push<float>(1);
+
 	va.AddBuffer(vb, layout); // 添加一个vertexBuffer，并且指明布局
 
 	IndexBuffer ib(indices, 2 * 3);
 
 	Shader shader("res/shaders/Basic.shader");
+	// Texture texture("res/textures/phone.png");
+	Texture texture("res/textures/gold-dollar.png");
+	texture.Bind();
 
-
-	float colorR = 0.8f;
-	float colorG = 0.3f;
-	float colorB = 0.8f;
-	float colorAlpha = 1.0f;
 	shader.Bind();
-	shader.SetUniform4f("u_Color", colorR, colorG, colorB, colorAlpha);
-	shader.UnBind();
+	shader.SetUniform1i("u_Texture", 0);
 
 	Renderer renderer;
-
-
-	float incr = 0.05f;
+	GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -111,17 +111,7 @@ int main(void)
 		renderer.Clear();
 
 		shader.Bind();
-		shader.SetUniform4f("u_Color", colorR, colorG, colorB, colorAlpha);
 		renderer.Draw(va, ib, shader);
-
-		if (colorR > 1.0f) {
-			incr = -0.05f;
-		}
-		else if (colorR < 0.0f)
-		{
-			incr = 0.05f;
-		}
-		colorR += incr;
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
