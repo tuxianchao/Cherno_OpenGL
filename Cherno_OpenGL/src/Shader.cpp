@@ -1,8 +1,7 @@
 #include "Shader.h"
 #include "Debug.h"
 
-
-Shader::Shader(const std::string &filePath): m_filePath(filePath), m_RenderID(0)
+Shader::Shader(const std::string &filePath) : m_filePath(filePath), m_RenderID(0)
 {
 	ShaderProgramSource shaderSource = ParseShader(m_filePath);
 	std::cout << shaderSource.VertexSource << std::endl;
@@ -28,7 +27,7 @@ bool Shader::CompileShader()
 	return true;
 }
 
-ShaderProgramSource Shader::ParseShader(const std::string& filePath)
+ShaderProgramSource Shader::ParseShader(const std::string &filePath)
 {
 	std::fstream stream(filePath);
 	std::string line;
@@ -54,13 +53,13 @@ ShaderProgramSource Shader::ParseShader(const std::string& filePath)
 			ss[int(type)] << line << "\n";
 		}
 	}
-	return { ss[0].str(), ss[1].str() };
+	return {ss[0].str(), ss[1].str()};
 }
 
-unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
+unsigned int Shader::CompileShader(unsigned int type, const std::string &source)
 {
 	GLCall(unsigned int id = glCreateShader(type));
-	const char* src = source.c_str();
+	const char *src = source.c_str();
 	GLCall(glShaderSource(id, 1, &src, nullptr));
 	GLCall(glCompileShader(id));
 
@@ -71,7 +70,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 	{
 		int len;
 		GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len));
-		char* message = (char*)alloca(sizeof(char) * len); //Ö±½ÓÕ»ÉÏ·ÖÅä
+		char *message = (char *)alloca(sizeof(char) * len); //Ö±ï¿½ï¿½Õ»ï¿½Ï·ï¿½ï¿½ï¿½
 		GLCall(glGetShaderInfoLog(id, len, &len, message));
 		std::cout << "Error: Compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "Shader." << std::endl;
 		std::cout << message << std::endl;
@@ -82,16 +81,15 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 	return id;
 }
 
-
-unsigned int Shader::CreateShader(const std::string& vertextShader, const std::string& fragmentShader)
+unsigned int Shader::CreateShader(const std::string &vertextShader, const std::string &fragmentShader)
 {
-	GLCall(unsigned int shaderProgram = glCreateProgram());                      // ´´½¨shaderProgram
-	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertextShader);    // ±àÒë¶¥µãshader
-	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader); // ±àÒëÏñËØshader
+	GLCall(unsigned int shaderProgram = glCreateProgram());				 // ï¿½ï¿½ï¿½ï¿½shaderProgram
+	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertextShader);	 // ï¿½ï¿½ï¿½ë¶¥ï¿½ï¿½shader
+	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½shader
 
-	GLCall(glAttachShader(shaderProgram, vs)); // ¸½¼Óµ½shaderProgram
-	GLCall(glAttachShader(shaderProgram, fs)); // ¸½¼Óµ½shaderProgram
-	GLCall(glLinkProgram(shaderProgram));      // Á´½Ó
+	GLCall(glAttachShader(shaderProgram, vs)); // ï¿½ï¿½ï¿½Óµï¿½shaderProgram
+	GLCall(glAttachShader(shaderProgram, fs)); // ï¿½ï¿½ï¿½Óµï¿½shaderProgram
+	GLCall(glLinkProgram(shaderProgram));	   // ï¿½ï¿½ï¿½ï¿½
 	GLCall(glValidateProgram(shaderProgram));  // https://docs.gl/gl4/glValidateProgram
 	GLCall(glDeleteShader(vs));
 	GLCall(glDeleteShader(fs));
@@ -103,7 +101,7 @@ unsigned int Shader::CreateShader(const std::string& vertextShader, const std::s
 	{
 		int len;
 		GLCall(glGetShaderiv(shaderProgram, GL_INFO_LOG_LENGTH, &len));
-		char* message = (char*)alloca(sizeof(char) * len); //Ö±½ÓÕ»ÉÏ·ÖÅä
+		char *message = (char *)alloca(sizeof(char) * len); //Ö±ï¿½ï¿½Õ»ï¿½Ï·ï¿½ï¿½ï¿½
 		GLCall(glGetProgramInfoLog(shaderProgram, len, &len, message));
 		std::cout << "Error:Link Shader." << std::endl;
 		std::cout << message << std::endl;
@@ -113,20 +111,18 @@ unsigned int Shader::CreateShader(const std::string& vertextShader, const std::s
 	return shaderProgram;
 }
 
-
-
 // set Uniforms
-void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+void Shader::SetUniform4f(const std::string &name, float v0, float v1, float v2, float v3)
 {
 	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 
-
-void Shader::SetUniform1i(const std::string& name, unsigned int value)
+void Shader::SetUniform1i(const std::string &name, unsigned int value)
 {
 	GLCall(glUniform1i(GetUniformLocation(name), value));
 }
-unsigned int Shader::GetUniformLocation(const std::string& name)
+
+unsigned int Shader::GetUniformLocation(const std::string &name)
 {
 	if (m_UniformLocaltionCache.find(name) != m_UniformLocaltionCache.end())
 	{

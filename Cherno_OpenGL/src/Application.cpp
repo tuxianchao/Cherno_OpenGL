@@ -71,25 +71,25 @@ int main(void)
 	};
 
 
-	// µäĞÍÁ÷³Ì
-	// 1. ´´½¨vao: glGenVertexArraysÉú³É¶¥µãÊı×é£¬glBindVertexArray°ó¶¨¶¥µãÊı×é£¬glEnableVertexAttribArrayÆôÓÃÖ¸¶¨µÄ¶¥µãÊôĞÔ£¬glVertexAttribPointerÉèÖÃ²¼¾Ö£¬´«µİÊı¾İ
-	// 2. ´´½¨vbo: glGenBuffersÉú³Ébuffer£¬glBindBuffer°ó¶¨buffer£¬glBufferData´ÓCPU¿½±´Êı¾İµ½GPU
-	// 3. ´´½¨ibo: glGenBuffersÉú³Ébuffer£¬glBindBuffer°ó¶¨buffer£¬glBufferData´Ócpu¿½±´Êı¾İµ½GPU
-	// 4. ´´½¨shader(±àÒëvs£¬±àÒëps£¬È»ºóÁ´½Ó³ÉÒ»¸öshaderProgram)
-	// 5. Ê¹ÓÃshaderprogram£º glUseProgramÖÆ¶¨shader
-	// 6. ´«µİuniformÊı¾İ£ºglUniform4f´«µİ¸øÖ¸¶¨µÄshader
-	// 6. ²Á³ı£¬°ó¶¨vao£¬°ó¶¨vbo£¬»­
+	// å…¸å‹æµç¨‹
+	// 1. åˆ›å»ºvao: glGenVertexArraysç”Ÿæˆé¡¶ç‚¹æ•°ç»„ï¼ŒglBindVertexArrayç»‘å®šé¡¶ç‚¹æ•°ç»„ï¼ŒglEnableVertexAttribArrayå¯ç”¨æŒ‡å®šçš„é¡¶ç‚¹å±æ€§ï¼ŒglVertexAttribPointerè®¾ç½®å¸ƒå±€ï¼Œä¼ é€’æ•°æ®
+	// 2. åˆ›å»ºvbo: glGenBuffersç”Ÿæˆbufferï¼ŒglBindBufferç»‘å®šbufferï¼ŒglBufferDataä»CPUæ‹·è´æ•°æ®åˆ°GPU
+	// 3. åˆ›å»ºibo: glGenBuffersç”Ÿæˆbufferï¼ŒglBindBufferç»‘å®šbufferï¼ŒglBufferDataä»cpuæ‹·è´æ•°æ®åˆ°GPU
+	// 4. åˆ›å»ºshader(ç¼–è¯‘vsï¼Œç¼–è¯‘psï¼Œç„¶åé“¾æ¥æˆä¸€ä¸ªshaderProgram)
+	// 5. ä½¿ç”¨shaderprogramï¼š glUseProgramåˆ¶å®šshader
+	// 6. ä¼ é€’uniformæ•°æ®ï¼šglUniform4fä¼ é€’ç»™æŒ‡å®šçš„shader
+	// 6. æ“¦é™¤ï¼Œç»‘å®švaoï¼Œç»‘å®švboï¼Œç”»
 
 
 
-	VertexArray va; // ´´½¨¶¥µãÊı×é¶ÔÏó,ÉèÖÃ²¼¾ÖºÍ´«Èë³ß´ç
+	VertexArray va; // åˆ›å»ºé¡¶ç‚¹æ•°ç»„å¯¹è±¡,è®¾ç½®å¸ƒå±€å’Œä¼ å…¥å°ºå¯¸
 	VertexBuffer vb(positions, sizeof(float) * 4 * 5);
 	VertexBufferLayout layout;
-	layout.Push<float>(2);// ÉèÖÃÁ½¸ö²¼¾Ö£¬Êı¾İÀàĞÍÊÇfloat
+	layout.Push<float>(2);// è®¾ç½®ä¸¤ä¸ªå¸ƒå±€ï¼Œæ•°æ®ç±»å‹æ˜¯float
 	layout.Push<float>(2);
 	layout.Push<float>(1);
 
-	va.AddBuffer(vb, layout); // Ìí¼ÓÒ»¸övertexBuffer£¬²¢ÇÒÖ¸Ã÷²¼¾Ö
+	va.AddBuffer(vb, layout); // æ·»åŠ ä¸€ä¸ªvertexBufferï¼Œå¹¶ä¸”æŒ‡æ˜å¸ƒå±€
 
 	IndexBuffer ib(indices, 2 * 3);
 

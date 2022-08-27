@@ -3,7 +3,7 @@
 
 void  GLClearError()
 {
-	// �Ѵ�����Ϣȡ��
+	// 把错误信息取完
 	while (glGetError() != GL_NO_ERROR);
 }
 
