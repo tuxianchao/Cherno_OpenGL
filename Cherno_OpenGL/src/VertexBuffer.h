@@ -10,5 +10,4 @@ public:
 
 	void Bind() const;
 	void UnBind() const;
-
 };

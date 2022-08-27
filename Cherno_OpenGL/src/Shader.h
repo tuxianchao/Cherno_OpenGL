@@ -19,8 +19,6 @@ enum class ShaderType
 	FGRAGMENT = 1
 };
 
-
-
 class Shader
 {
 private:
@@ -28,7 +26,6 @@ private:
 	unsigned int m_RenderID;
 	// cacheing for uniforms
 	std::unordered_map<std::string, unsigned int> m_UniformLocaltionCache;
-
 public:
 
 	Shader(const std::string& filePath);
