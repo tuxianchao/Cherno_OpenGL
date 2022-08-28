@@ -106,6 +106,8 @@ int main(void)
 	shader.SetUniform1i("u_Texture", 0);
 
 	Renderer renderer;
+
+	// 混合
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	/* Loop until the user closes the window */
