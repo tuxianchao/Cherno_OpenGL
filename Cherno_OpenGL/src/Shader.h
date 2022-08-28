@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <unordered_map> // hash��
+#include <unordered_map> // hash map
 
 struct ShaderProgramSource
 {
