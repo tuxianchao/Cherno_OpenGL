@@ -100,11 +100,15 @@ int main(void)
 
 	IndexBuffer ib(indices, 2 * 3);
 
-	glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);  // 投影矩阵
 
-	glm::vec4 vp(100.0f, 100.0f, 0.0f, 1.0f);
+	glm::mat4 ident = glm::mat4(1.0f);
+	glm::vec3 trans = glm::vec3(-100.0f, 0.0f, 0.0f);
+	glm::mat4 view = glm::translate(ident, trans); // 视图矩阵，沿着X轴移动了-100
 
-	glm::vec4 result = proj * vp;
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 100.0f, 0.0f)); // 模型矩阵，分别沿着X轴和Y轴移动了100
+
+	glm::mat4 mvp = proj * view * model;
 
 	Shader shader("res/shaders/Basic.shader");
 	// Texture texture("res/textures/phone.png");
@@ -113,7 +117,7 @@ int main(void)
 
 	shader.Bind();
 	shader.SetUniform1i("u_Texture", 0);
-	shader.SetUniformMat4f("u_MVP", proj);
+	shader.SetUniformMat4f("u_MVP", mvp);
 
 	Renderer renderer;
 
