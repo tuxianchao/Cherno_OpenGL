@@ -7,10 +7,13 @@ layout(location = 2) in float bRender;
 
 out vec2 v_TexCoord;
 out float v_bRender;
+
+uniform mat4 u_MVP;
 void main()
 {
 	v_TexCoord = texCoord;
-	gl_Position = position;
+	// gl_Position = position;
+	gl_Position = u_MVP * position;
 };
 
 

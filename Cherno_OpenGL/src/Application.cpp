@@ -15,6 +15,9 @@
 #include "VertexBufferLayout.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -35,7 +38,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(900, 600, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "800 * 600", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -97,6 +100,8 @@ int main(void)
 
 	IndexBuffer ib(indices, 2 * 3);
 
+	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f); // 4:3
+
 	Shader shader("res/shaders/Basic.shader");
 	// Texture texture("res/textures/phone.png");
 	Texture texture("res/textures/gold-dollar.png");
@@ -104,6 +109,7 @@ int main(void)
 
 	shader.Bind();
 	shader.SetUniform1i("u_Texture", 0);
+	shader.SetUniformMat4f("u_MVP", proj);
 
 	Renderer renderer;
 
