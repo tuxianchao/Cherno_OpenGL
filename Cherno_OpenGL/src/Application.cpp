@@ -18,6 +18,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -48,7 +51,7 @@ int main(void)
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, KeyCallbak);
 
-	glfwSwapInterval(1);
+	glfwSwapInterval(1); // Enable vsync
 
 	// init GLEW
 	glewExperimental = true;// need for core profile
@@ -100,15 +103,7 @@ int main(void)
 
 	IndexBuffer ib(indices, 2 * 3);
 
-	glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);  // 投影矩阵
 
-	glm::mat4 ident = glm::mat4(1.0f);
-	glm::vec3 trans = glm::vec3(-100.0f, 0.0f, 0.0f);
-	glm::mat4 view = glm::translate(ident, trans); // 视图矩阵，沿着X轴移动了-100
-
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 100.0f, 0.0f)); // 模型矩阵，分别沿着X轴和Y轴移动了100
-
-	glm::mat4 mvp = proj * view * model;
 
 	Shader shader("res/shaders/Basic.shader");
 	// Texture texture("res/textures/phone.png");
@@ -117,13 +112,28 @@ int main(void)
 
 	shader.Bind();
 	shader.SetUniform1i("u_Texture", 0);
-	shader.SetUniformMat4f("u_MVP", mvp);
+
 
 	Renderer renderer;
 
 	// 混合
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+
+
+	// imgui
+	ImGui::CreateContext();
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer backends
+	const char* glsl_version = "#version 130";
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
+	glm::vec3 trans = glm::vec3(-100.0f, 0.0f, 0.0f);
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -132,6 +142,27 @@ int main(void)
 
 		shader.Bind();
 		renderer.Draw(va, ib, shader);
+
+		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+		glm::mat4 ident = glm::mat4(1.0f);
+		glm::mat4 view = glm::translate(ident, trans);
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 100.0f, 0.0f));
+		glm::mat4 mvp = proj * view * model;
+		shader.SetUniformMat4f("u_MVP", mvp);
+
+		// Start the Dear ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		{
+			static float f = 0.0f;
+			ImGui::SliderFloat3("trans", &trans.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		}
+
+		// Rendering
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
