@@ -66,10 +66,10 @@ int main(void)
 	std::cout << "GL_VENDOR: " << glGetString(GL_VENDOR) << std::endl;
 
 	float positions[] = {
-		0.0f, 0.0f, 0.0f, 0.0f, 100.0f, // 0
-		200.0f, 0.0f, 1.0f, 0.0f, 100.0f, // 1
+		0.0f,	0.0f,	0.0f, 0.0f, 100.0f, // 0
+		200.0f, 0.0f,	1.0f, 0.0f, 100.0f, // 1
 		200.0f, 200.0f, 1.0f, 1.0f, 100.0f, // 2
-		0.0f, 200.0f, 0.0f, 1.0f, 100.0f  // 3
+		0.0f,	200.0f, 0.0f, 1.0f, 100.0f  // 3
 	};
 
 	unsigned int indices[] = {
