@@ -16,6 +16,9 @@
 #include "Texture.h"
 
 
+void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+
 
 
 int main(void)
@@ -40,6 +43,7 @@ int main(void)
 	}
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
+	glfwSetKeyCallback(window, KeyCallbak);
 
 	glfwSwapInterval(1);
 
@@ -123,4 +127,16 @@ int main(void)
 	// GLCall(glDeleteVertexArrays(1, &vao));
 	glfwTerminate();
 	return 0;
+}
+
+/*
+ * 按键回调
+ */
+void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	std::cout << "[KeyCallback]" << " key:" << key << " scancode: " << scancode << " action: " << action << " mods: " << mods << std::endl;
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
 }
