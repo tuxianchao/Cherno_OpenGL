@@ -127,14 +127,14 @@ void Shader::SetUniform1i(const std::string& name, unsigned int value)
 {
 	GLCall(glUniform1i(GetUniformLocation(name), value));
 }
-unsigned int Shader::GetUniformLocation(const std::string& name)
+int Shader::GetUniformLocation(const std::string& name)
 {
 	if (m_UniformLocaltionCache.find(name) != m_UniformLocaltionCache.end())
 	{
 		return m_UniformLocaltionCache[name];
 	}
 
-	GLCall(unsigned int location = glGetUniformLocation(m_RenderID, name.c_str()));
+	GLCall(int location = glGetUniformLocation(m_RenderID, name.c_str()));
 
 	// ASSERT(location != -1);
 	if (location == -1)

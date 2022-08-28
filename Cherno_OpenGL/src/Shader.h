@@ -40,7 +40,7 @@ public:
 
 private:
 	bool CompileShader();
-	unsigned int GetUniformLocation(const std::string &name);
+	int GetUniformLocation(const std::string &name);
 	unsigned int CreateShader(const std::string &vertextShader, const std::string &fragmentShader);
 	unsigned int CompileShader(unsigned int type, const std::string &source);
 	ShaderProgramSource ParseShader(const std::string &filePath);
