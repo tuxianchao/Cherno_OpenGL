@@ -22,6 +22,9 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "test/TestClearColor.h"
+#include "test/TestSwitchTexture.h"
+
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 
@@ -68,63 +71,15 @@ int main(void)
 	std::cout << "GL_RENDERER: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "GL_VENDOR: " << glGetString(GL_VENDOR) << std::endl;
 
-	float positions[] = {
-		-50.0f,	 -50.0f, 0.0f, 0.0f, 100.0f, // 0
-		 50.0f,  -50.0f, 1.0f, 0.0f, 100.0f, // 1
-		 50.0f,   50.0f, 1.0f, 1.0f, 100.0f, // 2
-		-50.0f,	  50.0f, 0.0f, 1.0f, 100.0f  // 3
-	};
-
-	unsigned int indices[] = {
-		0,1,2,
-		2,3,0
-	};
-
-
-	// 典型流程
-	// 1. 创建vao: glGenVertexArrays生成顶点数组，glBindVertexArray绑定顶点数组，glEnableVertexAttribArray启用指定的顶点属性，glVertexAttribPointer设置布局，传递数据
-	// 2. 创建vbo: glGenBuffers生成buffer，glBindBuffer绑定buffer，glBufferData从CPU拷贝数据到GPU
-	// 3. 创建ibo: glGenBuffers生成buffer，glBindBuffer绑定buffer，glBufferData从cpu拷贝数据到GPU
-	// 4. 创建shader(编译vs，编译ps，然后链接成一个shaderProgram)
-	// 5. 使用shaderprogram： glUseProgram制定shader
-	// 6. 传递uniform数据：glUniform4f传递给指定的shader
-	// 6. 擦除，绑定vao，绑定vbo，画
-
-
-
-	VertexArray va; // 创建顶点数组对象,设置布局和传入尺寸
-	VertexBuffer vb(positions, sizeof(float) * 4 * 5);
-	VertexBufferLayout layout;
-	layout.Push<float>(2);// 设置两个布局，数据类型是float
-	layout.Push<float>(2);
-	layout.Push<float>(1);
-
-	va.AddBuffer(vb, layout); // 添加一个vertexBuffer，并且指明布局
-
-	IndexBuffer ib(indices, 2 * 3);
-
-
-
-	Shader shader("res/shaders/Basic.shader");
-	// Texture texture("res/textures/phone.png");
-	Texture texture("res/textures/gold-dollar.png");
-	texture.Bind();
-
-	shader.Bind();
-	shader.SetUniform1i("u_Texture", 0);
-
 
 	Renderer renderer;
-
 	// 混合
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 
-
 	// imgui
 	ImGui::CreateContext();
-
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 
@@ -133,8 +88,13 @@ int main(void)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	glm::vec3 transA = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 transB = glm::vec3(100.0f, 0.0f, 0.0f);
+
+	// clear color测试案例
+	Test::TestClearColor testClearColor;
+
+	Test::TestSwitchTexture testSwitchTexture("res/textures/phone.png", "res/textures/gold-dollar.png");
+
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -142,40 +102,25 @@ int main(void)
 		renderer.Clear();
 
 
-
-		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-
-		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-		{
-			glm::mat4 ident = glm::mat4(1.0f);
-			glm::mat4 view = glm::translate(ident, transA);
-			glm::mat4 mvp = proj * view * model;
-			shader.Bind();
-			shader.SetUniformMat4f("u_MVP", mvp);
-			shader.SetUniform4f("u_Color", 0.0f, 0.0f, 0.0f, 1.0f);
-			renderer.Draw(va, ib, shader);
-		}
-		{
-			glm::mat4 ident = glm::mat4(1.0f);
-			glm::mat4 view = glm::translate(ident, transB);
-			glm::mat4 mvp = proj * view * model;
-			shader.Bind();
-			shader.SetUniformMat4f("u_MVP", mvp);
-			shader.SetUniform4f("u_Color", 1.0f, 0.0f, 0.0f, 1.0f);
-			renderer.Draw(va, ib, shader);
-		}
-
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		{
 			static float f = 0.0f;
-			ImGui::SliderFloat3("trans A", &transA.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-			ImGui::SliderFloat3("trans B", &transB.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		}
+
+		// testClearColor.OnUpdate(0.0f);
+		//testClearColor.OnRender();
+		//testClearColor.OnImGuiRenderer();
+
+
+		testSwitchTexture.OnUpdate(0.0f);
+		testSwitchTexture.OnRender();
+		testSwitchTexture.OnImGuiRenderer();
+
+		renderer.Draw(*testSwitchTexture.GetVA(), *testSwitchTexture.GetIB(), *testSwitchTexture.GetShader());
 
 		// Rendering
 		ImGui::Render();
