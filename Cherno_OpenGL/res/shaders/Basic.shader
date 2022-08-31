@@ -25,10 +25,11 @@ in vec2 v_TexCoord;
 in float v_bRender;
 
 uniform sampler2D u_Texture;
+uniform vec4 u_Color;
 
 void main()
 {
 	// color = vec4(0.2, 0.3, 0.8, 1.0); // red
 	vec4 texColor = texture(u_Texture, v_TexCoord);
-	color = texColor;
+	color = mix(texColor, u_Color, 0.4);
 };
