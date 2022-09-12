@@ -67,7 +67,7 @@ namespace Test
 	void TestSwitchTexture::OnRender()
 	{
 
-
+		// 颜色
 		GLCall(glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
@@ -78,9 +78,12 @@ namespace Test
 		glm::mat4 view = glm::translate(ident, m_Trans);
 		glm::mat4 mvp = proj * view * model;
 		m_Shader->Bind();
+		// mvp
 		m_Shader->SetUniformMat4f("u_MVP", mvp);
+		// 混合颜色
 		m_Shader->SetUniform4f("u_Color", m_MixColor[0], m_MixColor[1], m_MixColor[2], m_MixColor[3]);
 
+		// 纹理选择
 		if (m_ActiveA)
 		{
 			m_TextureA->Bind();
