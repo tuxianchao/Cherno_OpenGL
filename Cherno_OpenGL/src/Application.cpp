@@ -25,6 +25,7 @@
 #include "test/TestClearColor.h"
 #include "test/TestSwitchTexture.h"
 #include "test/TestTriangle.h"
+#include "test/TestMultipleObjects.h"
 
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -109,10 +110,9 @@ int main(void)
 			static float f = 0.0f;
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::RadioButton("1.TestClearColor", &radioSelection, 0);
-			// ImGui::SameLine();
 			ImGui::RadioButton("2.TestSwitchTexture", &radioSelection, 1);
-			// ImGui::SameLine();
 			ImGui::RadioButton("3.TestTriangle", &radioSelection, 2);
+			ImGui::RadioButton("4.TestMultipleObjects", &radioSelection, 3);
 			// ImGui::SameLine();
 		}
 
@@ -131,6 +131,10 @@ int main(void)
 			case 2:
 				delete testCase;
 				testCase = new Test::TestTriangle();
+				break;
+			case 3:
+				delete testCase;
+				testCase = new Test::TestMultipleObjects();
 				break;
 			}
 			currentSelection = radioSelection;

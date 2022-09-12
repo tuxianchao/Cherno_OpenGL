@@ -50,7 +50,7 @@ namespace Test
 
 	TestSwitchTexture::~TestSwitchTexture()
 	{
-		m_VA.unBind();
+		m_VA.UnBind();
 		m_VB.UnBind();
 		m_Shader.UnBind();
 		m_TextureA.UnBind();

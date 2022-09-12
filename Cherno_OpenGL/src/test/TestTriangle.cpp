@@ -29,7 +29,7 @@ namespace Test
 
 	TestTriangle::~TestTriangle()
 	{
-		m_VA.unBind();
+		m_VA.UnBind();
 		m_VB.UnBind();
 		m_Shader.UnBind();
 	}
