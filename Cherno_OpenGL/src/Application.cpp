@@ -26,6 +26,8 @@
 #include "test/TestSwitchTexture.h"
 #include "test/TestTriangle.h"
 #include "test/TestMultipleObjects.h"
+#include "test/TestUniform.h"
+
 
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -113,6 +115,8 @@ int main(void)
 			ImGui::RadioButton("2.TestSwitchTexture", &radioSelection, 1);
 			ImGui::RadioButton("3.TestTriangle", &radioSelection, 2);
 			ImGui::RadioButton("4.TestMultipleObjects", &radioSelection, 3);
+			ImGui::RadioButton("5.TestUniform", &radioSelection, 4);
+
 			// ImGui::SameLine();
 		}
 
@@ -136,11 +140,15 @@ int main(void)
 				delete testCase;
 				testCase = new Test::TestMultipleObjects();
 				break;
+			case 4:
+				delete testCase;
+				testCase = new Test::TestUniform();
+				break;
 			}
 			currentSelection = radioSelection;
 		}
 
-		if(testCase != nullptr)
+		if (testCase != nullptr)
 		{
 			testCase->OnUpdate(0.0f);
 			testCase->OnRender();

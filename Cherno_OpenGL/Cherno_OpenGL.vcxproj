@@ -105,6 +105,7 @@
     <ClCompile Include="src\test\TestMultipleObjects.cpp" />
     <ClCompile Include="src\test\TestSwitchTexture.cpp" />
     <ClCompile Include="src\test\TestTriangle.cpp" />
+    <ClCompile Include="src\test\TestUniform.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
@@ -124,6 +125,7 @@
     <None Include="res\shaders\Complex.shader" />
     <None Include="res\shaders\Simple.shader" />
     <None Include="res\shaders\SwitchTexture.shader" />
+    <None Include="res\shaders\Uniform.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
@@ -274,6 +276,7 @@
     <ClInclude Include="src\test\TestMultipleObjects.h" />
     <ClInclude Include="src\test\TestSwitchTexture.h" />
     <ClInclude Include="src\test\TestTriangle.h" />
+    <ClInclude Include="src\test\TestUniform.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_relational.hpp" />
