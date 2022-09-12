@@ -5,13 +5,13 @@
 Shader::Shader(const std::string &filePath): m_filePath(filePath), m_RenderID(0)
 {
 	ShaderProgramSource shaderSource = ParseShader(m_filePath);
-	std::cout << "[Shader]\n" << shaderSource.VertexSource << std::endl;
-	std::cout << "[Shader]\n" << shaderSource.FragmentSource << std::endl;
+	std::cout << "[Shader] vertext src\n" << shaderSource.VertexSource << std::endl;
+	std::cout << "[Shader] fragment src\n"  << shaderSource.FragmentSource << std::endl;
 	m_RenderID = CreateShader(shaderSource.VertexSource, shaderSource.FragmentSource);
 }
 Shader::~Shader()
 {
-	GLCall(glDeleteShader(m_RenderID));
+	GLCall(glDeleteProgram(m_RenderID));
 }
 
 void Shader::Bind() const

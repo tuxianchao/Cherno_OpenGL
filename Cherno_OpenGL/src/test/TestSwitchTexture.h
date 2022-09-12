@@ -9,6 +9,7 @@
 #include "../Shader.h"
 #include "../VertexBufferLayout.h"
 #include "../Texture.h"
+#include "../Renderer.h"
 
 
 #include "glm/glm.hpp"
@@ -17,29 +18,31 @@
 
 
 /*
- 测试案例，可通过imgUI切换混合颜色，纹理，坐标，以及clearColor
+可通过imgUI切换混合颜色，纹理，坐标，以及clearColor
 */
 namespace Test
 {
 	class TestSwitchTexture : public Test
 	{
 	private:
-		VertexArray  *m_VA;
-		VertexBuffer *m_VB;
-		VertexBufferLayout *m_Layout;
-		IndexBuffer *m_Ib;
-		Shader *m_Shader;
-		Texture *m_TextureA;
-		Texture *m_TextureB;
+		float				m_Positions[16];
+		unsigned int		m_Indices[6];
+		VertexArray			m_VA;
+		VertexBuffer		m_VB;
+		VertexBufferLayout	m_Layout;
+		IndexBuffer			m_Ib;
+		Shader				m_Shader;
+		Texture				m_TextureA;
+		Texture				m_TextureB;
 
-		glm::vec3 m_Trans;
+		glm::vec3			m_Trans;
 
 
-		float m_ClearColor[4];
-		float m_MixColor[4];
-		std::string m_TextureFilePathA;
-		std::string m_TextureFilePathB;
-		bool m_ActiveA;
+		Renderer			m_Renderer;
+
+		float				m_ClearColor[4];
+		float				m_MixColor[4];
+		bool				m_ActiveA;
 
 	public:
 		TestSwitchTexture(const std::string& textureFilePathA, const std::string& textureFilePathB);
@@ -49,9 +52,9 @@ namespace Test
 		virtual void OnRender() override;
 		virtual void OnImGuiRenderer() override;
 
-		inline VertexArray* GetVA() const { return m_VA; }
-		inline IndexBuffer*  GetIB() const { return m_Ib; }
-		inline Shader* GetShader() const { return m_Shader; }
+		inline VertexArray GetVA() const { return m_VA; }
+		inline IndexBuffer  GetIB() const { return m_Ib; }
+		inline Shader GetShader() const { return m_Shader; }
 
 	};
 }

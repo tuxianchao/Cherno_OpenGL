@@ -75,6 +75,9 @@
     <ClCompile Include="src\test\TestSwitchTexture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\test\TestTriangle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -496,6 +499,7 @@
       <Filter>头文件</Filter>
     </None>
     <None Include="res\shaders\SwitchTexture.shader" />
+    <None Include="res\shaders\Simple.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1417,6 +1421,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\test\TestSwitchTexture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\test\TestTriangle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

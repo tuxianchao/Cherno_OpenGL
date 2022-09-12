@@ -24,6 +24,7 @@
 
 #include "test/TestClearColor.h"
 #include "test/TestSwitchTexture.h"
+#include "test/TestTriangle.h"
 
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -89,11 +90,9 @@ int main(void)
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 
-	// clear color测试案例
-	Test::TestClearColor testClearColor;
-
-	Test::TestSwitchTexture testSwitchTexture("res/textures/phone.png", "res/textures/gold-dollar.png");
-
+	int currentSelection = -1;
+	int radioSelection = 0;
+	Test::Test *testCase = nullptr;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -109,18 +108,40 @@ int main(void)
 		{
 			static float f = 0.0f;
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::RadioButton("1.TestClearColor", &radioSelection, 0);
+			// ImGui::SameLine();
+			ImGui::RadioButton("2.TestSwitchTexture", &radioSelection, 1);
+			// ImGui::SameLine();
+			ImGui::RadioButton("3.TestTriangle", &radioSelection, 2);
+			// ImGui::SameLine();
 		}
 
-		// testClearColor.OnUpdate(0.0f);
-		//testClearColor.OnRender();
-		//testClearColor.OnImGuiRenderer();
+		if (currentSelection != radioSelection)
+		{
+			switch (radioSelection)
+			{
+			case 0:
+				delete testCase;
+				testCase = new Test::TestClearColor();
+				break;
+			case 1:
+				delete testCase;
+				testCase = new Test::TestSwitchTexture("res/textures/phone.png", "res/textures/gold-dollar.png");
+				break;
+			case 2:
+				delete testCase;
+				testCase = new Test::TestTriangle();
+				break;
+			}
+			currentSelection = radioSelection;
+		}
 
-
-		testSwitchTexture.OnUpdate(0.0f);
-		testSwitchTexture.OnRender();
-		testSwitchTexture.OnImGuiRenderer();
-
-		renderer.Draw(*testSwitchTexture.GetVA(), *testSwitchTexture.GetIB(), *testSwitchTexture.GetShader());
+		if(testCase != nullptr)
+		{
+			testCase->OnUpdate(0.0f);
+			testCase->OnRender();
+			testCase->OnImGuiRenderer();
+		}
 
 		// Rendering
 		ImGui::Render();
