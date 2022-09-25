@@ -26,7 +26,7 @@ private:
 	std::string m_filePath;
 	unsigned int m_RenderID;
 	// cacheing for uniforms
-	std::unordered_map<std::string, int> m_UniformLocaltionCache;
+	mutable std::unordered_map<std::string, int> m_UniformLocaltionCache;
 
 public:
 	Shader(const std::string& filePath);
@@ -43,7 +43,7 @@ public:
 
 private:
 	bool CompileShader();
-	int GetUniformLocation(const std::string& name);
+	int GetUniformLocation(const std::string& name) const;
 	unsigned int CreateShader(const std::string& vertextShader, const std::string& fragmentShader);
 	unsigned int CompileShader(unsigned int type, const std::string& source);
 	ShaderProgramSource ParseShader(const std::string& filePath);
