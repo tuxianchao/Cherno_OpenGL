@@ -27,6 +27,7 @@
 #include "test/TestTriangle.h"
 #include "test/TestMultipleObjects.h"
 #include "test/TestUniform.h"
+#include "test/TestBatchRender.h"
 
 
 void KeyCallbak(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -116,6 +117,7 @@ int main(void)
 			ImGui::RadioButton("3.TestTriangle", &radioSelection, 2);
 			ImGui::RadioButton("4.TestMultipleObjects", &radioSelection, 3);
 			ImGui::RadioButton("5.TestUniform", &radioSelection, 4);
+			ImGui::RadioButton("6.TestBatchRender", &radioSelection, 5);
 
 			// ImGui::SameLine();
 		}
@@ -143,6 +145,10 @@ int main(void)
 			case 4:
 				delete testCase;
 				testCase = new Test::TestUniform();
+				break;
+			case 5:
+				delete testCase;
+				testCase = new Test::TestBatchRender();
 				break;
 			}
 			currentSelection = radioSelection;

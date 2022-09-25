@@ -134,6 +134,11 @@ void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& value)
 	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]));
 }
 
+void Shader::SetUnifrom1iv(const std::string& name, int count, int* value)
+{
+	GLCall(glUniform1iv(GetUniformLocation(name), count, value));
+}
+
 int Shader::GetUniformLocation(const std::string& name) const
 {
 	if (m_UniformLocaltionCache.find(name) != m_UniformLocaltionCache.end())
@@ -146,7 +151,7 @@ int Shader::GetUniformLocation(const std::string& name) const
 	// ASSERT(location != -1);
 	if (location == -1)
 	{
-		std::cout << "warning shader unifrom" << name << "does't exist." << std::endl;
+		std::cout << "warning shader unifrom	" << name << "	does't exist." << std::endl;
 	}
 	else
 	{
